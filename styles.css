@@ -390,6 +390,7 @@ main::before {
     color: transparent;
     border-bottom: #000000 2px dashed;
     -webkit-text-stroke: 2px #333;
+    letter-spacing: 2.5px;
     font-weight: 900;
     transition: all 0.3s ease;
 }
@@ -487,7 +488,10 @@ main::before {
 .hero-description {
     font-size: clamp(1rem, 2.5vw, 1.1rem);
     line-height: 1.7;
-    color: #666;
+    color: #333;
+    background-color: rgba(255, 255, 255, 0.562);
+    backdrop-filter: blur(100px); /* Background blur effect */
+    -webkit-backdrop-filter: blur(2px); /* Safari support */
     max-width: 800px;
     margin: 0 auto;
     text-align: justify;
@@ -498,6 +502,7 @@ main::before {
     gap: 20px;
     justify-content: center;
     flex-wrap: wrap;
+    margin-top: 20px;
 }
 
 /* ===== BUTTON STYLES ===== */
@@ -582,7 +587,7 @@ main::before {
 .startups-section,
 .application-section,
 .contact-section {
-    padding: 80px 20px;
+    padding: 50px 20px;
     max-width: 1200px;
     margin: 0 auto;
 }
@@ -653,8 +658,31 @@ main::before {
 }
 
 .service-icon {
-    font-size: 3rem;
-    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 20px;
+    border: 3px solid #333;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.service-icon i {
+    font-size: 2.5rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover .service-icon {
+    background: #333;
+    transform: scale(1.1);
+}
+
+.service-card:hover .service-icon i {
+    color: #fff;
 }
 
 .service-card h3 {
@@ -711,8 +739,31 @@ main::before {
 }
 
 .facility-icon {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.facility-icon i {
+    font-size: 1.8rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.facility-card:hover .facility-icon {
+    background: #333;
+    transform: scale(1.1);
+}
+
+.facility-card:hover .facility-icon i {
+    color: #fff;
 }
 
 .facility-card h3 {
@@ -771,10 +822,9 @@ main::before {
 }
 
 .logo-placeholder {
-    width: 80px;
-    height: 80px;
+    height: 150px;
     border: 3px solid #333;
-    border-radius: 50%;
+    border-radius: 2.5%;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -782,6 +832,7 @@ main::before {
     font-weight: 700;
     font-size: 1.1rem;
     color: #333;
+    filter: grayscale(100%);
     transition: all 0.3s ease;
 }
 
@@ -916,8 +967,31 @@ main::before {
 }
 
 .contact-icon {
-    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: 2px solid #333;
+    border-radius: 50%;
+    background: transparent;
     margin-top: 5px;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.contact-icon i {
+    font-size: 1.2rem;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.contact-item:hover .contact-icon {
+    background: #333;
+}
+
+.contact-item:hover .contact-icon i {
+    color: #fff;
 }
 
 .contact-details p {
@@ -1052,7 +1126,13 @@ main::before {
     
     .service-card.in-view .service-icon,
     .facility-card.in-view .facility-icon {
-        filter: brightness(1.5);
+        background: #333;
+        transform: scale(1.05);
+    }
+    
+    .service-card.in-view .service-icon i,
+    .facility-card.in-view .facility-icon i {
+        color: #fff;
     }
     
     .startup-card.in-view .logo-placeholder,
