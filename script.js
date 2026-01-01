@@ -112,32 +112,71 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Form submission handler
-    const contactForm = document.querySelector('#contact form');
+    // Form submission handler (wired to Formspree)
+    const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
-            // Basic form validation
-            const name = this.querySelector('#name').value.trim();
-            const email = this.querySelector('#email').value.trim();
-            const message = this.querySelector('#message').value.trim();
-            
+
+            const form = this;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const feedback = form.querySelector('#contact-feedback');
+            const name = form.querySelector('#name').value.trim();
+            const email = form.querySelector('#email').value.trim();
+            const subject = form.querySelector('#subject').value.trim();
+            const message = form.querySelector('#message').value.trim();
+
+            // Basic validation
             if (!name || !email || !message) {
-                alert('Please fill in all required fields.');
+                feedback.style.display = 'block';
+                feedback.textContent = 'Please fill in all required fields.';
+                feedback.style.color = 'var(--danger-color, #c00)';
                 return;
             }
-            
-            // Email validation
+
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('Please enter a valid email address.');
+                feedback.style.display = 'block';
+                feedback.textContent = 'Please enter a valid email address.';
+                feedback.style.color = 'var(--danger-color, #c00)';
                 return;
             }
-            
-            // Show success message (replace with actual form submission)
-            alert('Thank you for your message! We will get back to you soon.');
-            this.reset();
+
+            // Formspree endpoint (your provided URL)
+            const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mlgrqllb';
+            const formData = new FormData(form);
+
+            try {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+                feedback.style.display = 'block';
+                feedback.textContent = 'Sending message...';
+                feedback.style.color = '';
+
+                const res = await fetch(FORMSPREE_ENDPOINT, {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                });
+
+                if (res.ok) {
+                    feedback.textContent = 'Thank you — your message was sent!';
+                    feedback.style.color = 'var(--success-color, #0a0)';
+                    form.reset();
+                } else {
+                    const data = await res.json().catch(() => ({}));
+                    const err = data?.error || 'Failed to send message. Please try again later.';
+                    feedback.textContent = err;
+                    feedback.style.color = 'var(--danger-color, #c00)';
+                }
+            } catch (err) {
+                feedback.textContent = 'Network error. Please try again later.';
+                feedback.style.color = 'var(--danger-color, #c00)';
+                console.error(err);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
         });
     }
 });

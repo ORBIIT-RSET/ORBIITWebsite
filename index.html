@@ -87,7 +87,7 @@
                 <div class="hero-buttons">
                     <a href="https://docs.google.com/forms/d/1292wyaRirGQvRGc2C3LzrZkxnrqteihL91WgCzVLOVM/viewform?edit_requested=true" class="btn btn-primary">Apply for Incubation</a>
                     <a href="#contact" class="btn btn-secondary">Book a Visit</a>
-                    <a href="#" class="btn btn-outline">Guidelines</a>
+                    <a href="Rajagiri ORBIIT_Guidelines_Policies.pdf" class="btn btn-outline">Guidelines</a>
                 </div>
             </div>
         </section>
@@ -361,7 +361,8 @@
                 <div class="contact-form animate-on-scroll">
                     <div class="card-outlined-blur">
                         <h3>Send us a Message</h3>
-                        <form>
+                        <form id="contact-form" novalidate>
+                            <div id="contact-feedback" class="form-feedback" aria-live="polite" style="display:none;margin-bottom:12px;"></div>
                             <div class="form-group">
                                 <input type="text" id="name" name="name" placeholder="Your Name" required>
                             </div>
