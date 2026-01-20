@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startups - ORBIIT CMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css" type="text/css">
+    <style>
+        .cms-section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            min-height: 80vh;
+        }
+
+        .cms-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .cms-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 900;
+            color: #333;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .cms-subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .startup-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .startup-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border: 3px solid #333;
+            padding: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .startup-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            background: rgba(0, 0, 0, 0.05);
+            box-shadow: 15px 15px 0px #333;
+        }
+
+        .startup-card h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #333;
+            -webkit-text-stroke: 0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .startup-card:hover h3 {
+            color: #333;
+            -webkit-text-stroke: 0;
+        }
+
+        .startup-tag {
+            display: inline-block;
+            padding: 4px 12px;
+            background: #333;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            align-self: flex-start;
+        }
+
+        .startup-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #444;
+            flex-grow: 1;
+        }
+
+        .startup-link {
+            text-decoration: none;
+            color: #333;
+            font-weight: 700;
+            border-bottom: 2px solid #333;
+            align-self: flex-start;
+            transition: all 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .startup-link:hover {
+            letter-spacing: 1px;
+            padding-right: 5px;
+        }
+
+        .loading-container {
+            text-align: center;
+            padding: 50px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(0, 0, 0, 0.1);
+            border-top: 5px solid #333;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        #error-message {
+            display: none;
+            background: rgba(255, 0, 0, 0.1);
+            border: 2px dashed #ff4444;
+            padding: 20px;
+            text-align: center;
+            color: #cc0000;
+            margin-top: 20px;
+        }
+
+        /* Hero styling for Startup page */
+        .cms-hero {
+            background: #fcfafa;
+            border-bottom: 3px solid #333;
+            padding: 100px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cms-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: linear-gradient(#333 1px, transparent 1px), linear-gradient(to right, #333 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-content {
+            background-color: #fcfafa;
+            margin: 5% auto;
+            padding: 40px;
+            border: 3px solid #333;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            box-shadow: 20px 20px 0px #333;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            color: #333;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .modal-details {
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #ccc;
+            padding-bottom: 10px;
+        }
+
+        .detail-label {
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: #666;
+            display: block;
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            color: #333;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <a href="index.html"><img src="logo.jpeg" class="logo" alt="ORBIIT" style="height: 80px; width: 240px;"></a>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+                <span class="nav-toggle-bar"></span>
+            </div>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">About</a></li>
+                <li><a href="startup.html" class="active">Startups</a></li>
+                <li><a href="index.html#facilities">Facilities</a></li>
+                <!--<li><a href="index.html#startups">Startups</a></li> -->
+                <li><a href="index.html#application">Apply</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="cms-hero">
+            <div class="cms-header animate__animated animate__fadeIn">
+                <h1 class="cms-title"></h1>
+                <p class="cms-subtitle"></p>
+            </div>
+        </section>
+
+        <section class="cms-section">
+            <div id="loading" class="loading-container">
+                <div class="spinner"></div>
+                <p>Fetching latest startup data...</p>
+            </div>
+
+            <div id="error-message">
+                <i class="fas fa-exclamation-triangle fa-2x"></i>
+                <p id="error-text">Unable to connect to Airtable. Please check your Base ID and Token.</p>
+                <div style="margin-top: 15px;">
+                    <a href="index.html#startups" class="btn btn-outline"
+                        style="padding: 10px 20px; font-size: 0.8rem;">View Offline Version</a>
+                </div>
+            </div>
+
+            <div id="startup-container" class="startup-grid">
+                <!-- Cards will be injected here -->
+            </div>
+        </section>
+
+        <!-- Dynamic Modal for Startup Details -->
+        <div id="startup-modal" class="modal">
+            <div class="modal-content animate__animated animate__zoomIn">
+                <span class="close-modal">&times;</span>
+                <div id="modal-body">
+                    <!-- Dynamic content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2025 ORBIIT. All rights reserved.</p>
+            <p>Rajagiri School of Engineering & Technology</p>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script>
+        // Configuration Variables
+        let AIRTABLE_TOKEN = '';
+        let BASE_ID = '';
+        let STARTUPS_TABLE_ID = '';
+        let CONTENT_TABLE_ID = '';
+
+        async function loadConfig() {
+            // First check if CONFIG exists from config.js
+            if (typeof CONFIG !== 'undefined') {
+                AIRTABLE_TOKEN = CONFIG.AIRTABLE_TOKEN;
+                BASE_ID = CONFIG.BASE_ID;
+                STARTUPS_TABLE_ID = CONFIG.STARTUPS_TABLE_ID;
+                CONTENT_TABLE_ID = CONFIG.CONTENT_TABLE_ID;
+                if (AIRTABLE_TOKEN && BASE_ID) return;
+            }
+
+            try {
+                // Secondary fallback: Try fetching .env file (works on some local servers)
+                const response = await fetch('.env');
+                if (!response.ok) throw new Error('.env file not found or inaccessible');
+                const text = await response.text();
+
+                const lines = text.split('\n');
+                const config = {};
+                lines.forEach(line => {
+                    const parts = line.split('=');
+                    if (parts.length >= 2) {
+                        const key = parts[0].trim();
+                        const value = parts.slice(1).join('=').trim();
+                        config[key] = value;
+                    }
+                });
+
+                AIRTABLE_TOKEN = config.AIRTABLE_TOKEN;
+                BASE_ID = config.AIRTABLE_BASE_ID;
+                STARTUPS_TABLE_ID = config.AIRTABLE_STARTUPS_TABLE_ID;
+                CONTENT_TABLE_ID = config.AIRTABLE_CONTENT_TABLE_ID;
+            } catch (err) {
+                console.warn('Config Error:', err);
+                if (!AIRTABLE_TOKEN || !BASE_ID) {
+                    throw new Error('Configuration not found. Please ensure config.js exists or .env is accessible.');
+                }
+            }
+        }
+
+        async function fetchCMSData() {
+            const loading = document.getElementById('loading');
+            const errorDiv = document.getElementById('error-message');
+            const errorText = document.getElementById('error-text');
+
+            try {
+                // Ensure config is loaded first
+                await loadConfig();
+
+                // Fetch both tables in parallel
+                const [startupsResponse, contentResponse] = await Promise.all([
+                    fetch(`https://api.airtable.com/v0/${BASE_ID}/${STARTUPS_TABLE_ID}`, {
+                        headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
+                    }),
+                    fetch(`https://api.airtable.com/v0/${BASE_ID}/${CONTENT_TABLE_ID}`, {
+                        headers: { 'Authorization': `Bearer ${AIRTABLE_TOKEN}` }
+                    })
+                ]);
+
+                if (!startupsResponse.ok || !contentResponse.ok) {
+                    throw new Error(`Failed to fetch data from Airtable. Status: ${startupsResponse.status}/${contentResponse.status}`);
+                }
+
+                const startupsData = await startupsResponse.json();
+                const contentData = await contentResponse.json();
+
+                loading.style.display = 'none';
+
+                // 1. Update Hero Content from "Content Items" table
+                if (contentData.records && contentData.records.length > 0) {
+                    updatePageContent(contentData.records);
+                }
+
+                // 2. Render Startup Cards from "Startups" table
+                if (startupsData.records && startupsData.records.length > 0) {
+                    renderCards(startupsData.records);
+                } else {
+                    errorDiv.style.display = 'block';
+                    errorText.textContent = 'No startup records found.';
+                }
+
+            } catch (err) {
+                console.error('Airtable Error:', err);
+                loading.style.display = 'none';
+                errorDiv.style.display = 'block';
+                errorText.textContent = 'Error: ' + err.message;
+            }
+        }
+
+        function updatePageContent(records) {
+            // Logic disabled to keep headings blank as requested
+        }
+
+        function renderCards(records) {
+            const container = document.getElementById('startup-container');
+            container.innerHTML = '';
+
+            records.forEach((record, index) => {
+                const fields = record.fields;
+
+                // Aggressive field mapping to handle Airtable's specific naming
+                const name = fields['START UP NAME'] || fields['Name'] || fields['StartupName'] || fields['Title'] || fields['NAME'] || 'Untitled Startup';
+
+                // Skip header rows or placeholder entries
+                if (name === 'START UP NAME' || name === 'Untitled Startup' || !name) return;
+
+                const description = fields['Body'] || fields['Description'] || fields['Bio'] || fields['Summary'] || fields['Summary (AI)']?.value || '';
+                const tag = fields['DOMAIN'] || fields['Industry'] || fields['Category'] || fields['Content Category (AI)']?.value || fields['Type'] || 'Innovation';
+                const website = fields['Website'] || fields['Link'] || '#';
+
+                const card = document.createElement('div');
+                card.className = 'startup-card animate__animated animate__fadeInUp';
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                card.innerHTML = `
+                    <div class="startup-tag">${tag}</div>
+                    <h3>${name}</h3>
+                    <p class="startup-desc">${description}</p>
+                    <div style="display:flex; gap:15px; margin-top:15px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" style="padding: 10px 20px; font-size: 0.8rem;" onclick='showDetails(${JSON.stringify(record).replace(/'/g, "&apos;")})'>Details</button>
+                        ${website !== '#' ? `<a href="${website}" target="_blank" class="startup-link" style="margin-top:5px;">Website <i class="fas fa-external-link-alt"></i></a>` : ''}
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        function showDetails(record) {
+            const f = record.fields;
+            const modal = document.getElementById('startup-modal');
+            const body = document.getElementById('modal-body');
+
+            const name = f['START UP NAME'] || f['Name'] || 'Startup Details';
+
+            body.innerHTML = `
+                <h2 style="font-size: 2rem; font-weight: 900; color: #333; text-transform: uppercase;">${name}</h2>
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <span class="detail-label">Domain / Industry</span>
+                        <span class="detail-value">${f['DOMAIN'] || 'Innovation'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Founder(s)</span>
+                        <span class="detail-value">${f['FOUNDER(s)'] || 'Information not available'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Incubation Start Date</span>
+                        <span class="detail-value">${f['INCUBATION START DATE'] || 'Pending'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Current Status</span>
+                        <span class="detail-value" style="color:${(f['CURRENT STATUS'] || '').includes('ACTIVE') ? '#0a0' : '#333'}">${f['CURRENT STATUS'] || 'Active'}</span>
+                    </div>
+                    <div class="detail-item" style="border:none;">
+                        <span class="detail-label">Team Members</span>
+                        <span class="detail-value">${f['TEAM MEMBERS'] || 'N/A'}</span>
+                    </div>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        // Close modal logic
+        document.addEventListener('click', (e) => {
+            const modal = document.getElementById('startup-modal');
+            if (e.target === modal || e.target.classList.contains('close-modal')) {
+                modal.style.display = 'none';
+            }
+        });
+
+        // Initialize fetch
+        document.addEventListener('DOMContentLoaded', fetchCMSData);
+
+        // Mobile nav toggle (same as index.html)
+        const navToggle = document.getElementById('nav-toggle');
+        const navLinks = document.getElementById('nav-links');
+        if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+                navToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+            });
+        }
+    </script>
+</body>
+
+</html>
