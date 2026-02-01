@@ -1,45 +1,59 @@
-body{
+body {
     font-family: proxima-nova-hangeul, Arial, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 85px 0 0 0;
+    /* Updated padding for slightly taller header */
+    /* Padding top to account for fixed header */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
 /*Navigation Bar*/
-header{
+header {
     background-color: #000000;
     color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
-header nav{
+
+header nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 10px;
+    padding: 0px 20px;
+    /* Reduced vertical padding to allow logo to dominate */
 }
 
 
 
 .logo {
-    height: 40px;
-    width: 120px; /* Force wider aspect ratio */
-    object-fit: contain; /* Logo will fit within this rectangle */
+    height: 80px;
+    /* Increased height to cover header */
+    width: auto;
+    /* Maintain aspect ratio */
+    object-fit: contain;
     margin: 0;
-    padding: 0;
+    padding: 2px 0;
 }
 
 
-header nav ul{
+header nav ul {
     list-style: none;
     display: flex;
     gap: clamp(10px, 3vw, 20px);
 }
-header nav ul li a{
+
+header nav ul li a {
     display: inline;
     color: #fff;
     text-decoration: none;
-    font-size: clamp(0.9rem, 2.5vw, 1.1rem); /* Responsive font size */
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    /* Responsive font size */
     transition: color 0.3s ease;
 }
 
@@ -68,7 +82,7 @@ header nav ul li a:hover {
     .nav-toggle {
         display: flex;
     }
-    
+
     .nav-links {
         position: absolute;
         top: 100%;
@@ -83,42 +97,44 @@ header nav ul li a:hover {
         transition: all 0.3s ease;
         z-index: 1000;
     }
-    
+
     .nav-links.active {
         transform: translateY(0);
         opacity: 1;
         visibility: visible;
     }
-    
+
     .nav-links li {
         margin: 10px 0;
         text-align: center;
     }
-    
+
     .nav-links li a {
         font-size: 1.2rem;
         padding: 10px;
         display: block;
     }
-    
+
     /* Hamburger Animation */
     .nav-toggle.active .nav-toggle-bar:nth-child(1) {
         transform: rotate(-45deg) translate(-5px, 6px);
     }
-    
+
     .nav-toggle.active .nav-toggle-bar:nth-child(2) {
         opacity: 0;
     }
-    
+
     .nav-toggle.active .nav-toggle-bar:nth-child(3) {
         transform: rotate(45deg) translate(-5px, -6px);
     }
 }
 
 
-main{
-    flex: 1; /* Takes remaining space */
-    position: relative; /* Add this */
+main {
+    flex: 1;
+    /* Takes remaining space */
+    position: relative;
+    /* Add this */
 }
 
 /* Create the opacity effect using a pseudo-element */
@@ -132,9 +148,12 @@ main::before {
     background-color: #fcfafa;
     background-image: linear-gradient(#000000 1.1px, transparent 1.1px), linear-gradient(to right, #000000 1.1px, #ffffff 1.1px);
     background-size: 22px 22px;
-    opacity: 0.2; /* Apply opacity only to the background pattern */
-    z-index: -1; /* Put it behind content */
-    pointer-events: none; /* Don't interfere with interactions */
+    opacity: 0.2;
+    /* Apply opacity only to the background pattern */
+    z-index: -1;
+    /* Put it behind content */
+    pointer-events: none;
+    /* Don't interfere with interactions */
 }
 
 /* ORBIIT Animation Section */
@@ -145,7 +164,8 @@ main::before {
     position: relative;
     width: 100vw;
     height: 77vh;
-    perspective: 1000px; /* Enables 3D transforms for child elements */
+    perspective: 1000px;
+    /* Enables 3D transforms for child elements */
     overflow: hidden;
 }
 
@@ -154,8 +174,10 @@ main::before {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* Centers the container */
-    width: min(600px, 90vw); /* Responsive sizing with maximum and viewport-based fallback */
+    transform: translate(-50%, -50%);
+    /* Centers the container */
+    width: min(600px, 90vw);
+    /* Responsive sizing with maximum and viewport-based fallback */
     height: min(300px, 45vw);
 }
 
@@ -165,12 +187,33 @@ main::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: clamp(40px, 8vw, 80px); /* Responsive font size: min, preferred, max */
+    font-size: clamp(40px, 8vw, 80px);
+    /* Responsive font size: min, preferred, max */
     font-weight: 700;
-    color: transparent; /* Makes text hollow */
-    -webkit-text-stroke: clamp(2px, 0.4vw, 3px) #333; /* Creates outlined text effect */
-    letter-spacing: clamp(4px, 1vw, 8px); /* Responsive letter spacing */
-    z-index: 10; /* Ensures text appears above stars */
+    color: transparent;
+    /* Makes text hollow */
+    -webkit-text-stroke: clamp(2px, 0.4vw, 3px) #333;
+    /* Creates outlined text effect */
+    letter-spacing: clamp(4px, 1vw, 8px);
+    /* Responsive letter spacing */
+    z-index: 10;
+    /* Ensures text appears above stars */
+}
+
+.orbiit-full-form-banner {
+    width: 100%;
+    text-align: center;
+    padding: 20px 10px;
+    font-size: clamp(0.7rem, 2vw, 1.3rem);
+    font-weight: 800;
+    letter-spacing: clamp(2px, 0.8vw, 6px);
+    color: #333;
+    background-color: transparent;
+    text-transform: uppercase;
+    position: relative;
+    margin-top: -40px;
+    /* Pull it closer to the animation but keep it outside */
+    z-index: 20;
 }
 
 /* ===== 3D ORBIT SYSTEM CONTAINER ===== */
@@ -178,11 +221,14 @@ main::before {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) rotateX(75deg); /* Tilts the orbit to create 3D perspective */
+    transform: translate(-50%, -50%) rotateX(75deg);
+    /* Tilts the orbit to create 3D perspective */
     width: min(450px, 80vw);
     height: min(450px, 80vw);
-    animation: wobble 8s ease-in-out infinite; /* Adds natural wobble motion */
-    transform-style: preserve-3d; /* Maintains 3D transforms for child elements */
+    animation: wobble 8s ease-in-out infinite;
+    /* Adds natural wobble motion */
+    transform-style: preserve-3d;
+    /* Maintains 3D transforms for child elements */
 }
 
 /* ===== CIRCULAR ORBIT PATH ===== */
@@ -194,9 +240,12 @@ main::before {
     width: 100%;
     height: 100%;
     border: clamp(2px, 0.4vw, 3px) solid #333;
-    border-radius: 50%; /* Creates perfect circle */
-    opacity: 0.6; /* Semi-transparent to avoid overpowering the design */
-    animation: ring-rotate 6s linear infinite; /* Rotates the ring continuously */
+    border-radius: 50%;
+    /* Creates perfect circle */
+    opacity: 0.6;
+    /* Semi-transparent to avoid overpowering the design */
+    animation: ring-rotate 6s linear infinite;
+    /* Rotates the ring continuously */
 }
 
 /* ===== 3D SPHERE THAT ORBITS ===== */
@@ -206,10 +255,14 @@ main::before {
     left: 50%;
     width: clamp(30px, 5vw, 40px);
     height: clamp(30px, 5vw, 40px);
-    animation: sphere-orbit 6s linear infinite; /* Moves sphere around the orbit path */
-    transform-origin: 0 0; /* Sets rotation point for orbital motion */
-    transform-style: preserve-3d; /* Enables 3D transforms for sphere circles */
-    z-index: 15; /* Appears above text and stars */
+    animation: sphere-orbit 6s linear infinite;
+    /* Moves sphere around the orbit path */
+    transform-origin: 0 0;
+    /* Sets rotation point for orbital motion */
+    transform-style: preserve-3d;
+    /* Enables 3D transforms for sphere circles */
+    z-index: 15;
+    /* Appears above text and stars */
 }
 
 /* ===== INDIVIDUAL CIRCLES THAT FORM THE 3D SPHERE ===== */
@@ -244,12 +297,16 @@ main::before {
 /* Base star styling */
 .star {
     position: absolute;
-    width: clamp(8px, 1.5vw, 12px); /* Responsive star size */
+    width: clamp(8px, 1.5vw, 12px);
+    /* Responsive star size */
     height: clamp(8px, 1.5vw, 12px);
     border: clamp(1px, 0.3vw, 2px) solid #000;
-    border-radius: 50%; /* Makes them circular */
-    background: transparent; /* Hollow stars */
-    animation: float 4s ease-in-out infinite; /* Gentle floating animation */
+    border-radius: 50%;
+    /* Makes them circular */
+    background: transparent;
+    /* Hollow stars */
+    animation: float 4s ease-in-out infinite;
+    /* Gentle floating animation */
 }
 
 /* Smaller variant of stars for visual variety */
@@ -260,18 +317,89 @@ main::before {
 }
 
 /* ===== STAR POSITIONING - Random distribution around orbit ===== */
-.star:nth-child(1) { top: 22%; left: 48%; animation-delay: 0s; z-index: 1; }
-.star:nth-child(2) { top: 38%; left: 78%; animation-delay: 1.3s; z-index: 2; }
-.star:nth-child(3) { top: 55%; left: 88%; animation-delay: 2.1s; z-index: 1; }
-.star:nth-child(4) { top: 68%; left: 72%; animation-delay: 0.7s; z-index: 2; }
-.star:nth-child(5) { top: 78%; left: 45%; animation-delay: 3.4s; z-index: 1; }
-.star:nth-child(6) { top: 62%; left: 18%; animation-delay: 1.8s; z-index: 2; }
-.star:nth-child(7) { top: 46%; left: 12%; animation-delay: 2.9s; z-index: 1; }
-.star:nth-child(8) { top: 28%; left: 32%; animation-delay: 0.3s; z-index: 2; }
-.star:nth-child(9) { top: 35%; left: 62%; animation-delay: 1.6s; z-index: 1; }
-.star:nth-child(10) { top: 72%; left: 58%; animation-delay: 2.5s; z-index: 2; }
-.star:nth-child(11) { top: 65%; left: 38%; animation-delay: 3.7s; z-index: 1; }
-.star:nth-child(12) { top: 25%; left: 82%; animation-delay: 0.9s; z-index: 2; }
+.star:nth-child(1) {
+    top: 22%;
+    left: 48%;
+    animation-delay: 0s;
+    z-index: 1;
+}
+
+.star:nth-child(2) {
+    top: 38%;
+    left: 78%;
+    animation-delay: 1.3s;
+    z-index: 2;
+}
+
+.star:nth-child(3) {
+    top: 55%;
+    left: 88%;
+    animation-delay: 2.1s;
+    z-index: 1;
+}
+
+.star:nth-child(4) {
+    top: 68%;
+    left: 72%;
+    animation-delay: 0.7s;
+    z-index: 2;
+}
+
+.star:nth-child(5) {
+    top: 78%;
+    left: 45%;
+    animation-delay: 3.4s;
+    z-index: 1;
+}
+
+.star:nth-child(6) {
+    top: 62%;
+    left: 18%;
+    animation-delay: 1.8s;
+    z-index: 2;
+}
+
+.star:nth-child(7) {
+    top: 46%;
+    left: 12%;
+    animation-delay: 2.9s;
+    z-index: 1;
+}
+
+.star:nth-child(8) {
+    top: 28%;
+    left: 32%;
+    animation-delay: 0.3s;
+    z-index: 2;
+}
+
+.star:nth-child(9) {
+    top: 35%;
+    left: 62%;
+    animation-delay: 1.6s;
+    z-index: 1;
+}
+
+.star:nth-child(10) {
+    top: 72%;
+    left: 58%;
+    animation-delay: 2.5s;
+    z-index: 2;
+}
+
+.star:nth-child(11) {
+    top: 65%;
+    left: 38%;
+    animation-delay: 3.7s;
+    z-index: 1;
+}
+
+.star:nth-child(12) {
+    top: 25%;
+    left: 82%;
+    animation-delay: 0.9s;
+    z-index: 2;
+}
 
 /* ===== ANIMATIONS ===== */
 
@@ -280,6 +408,7 @@ main::before {
     0% {
         transform: translate(-50%, -50%) rotateZ(0deg);
     }
+
     100% {
         transform: translate(-50%, -50%) rotateZ(360deg);
     }
@@ -290,15 +419,19 @@ main::before {
     0% {
         transform: translate(-50%, -50%) rotate(0deg) translateX(225px) rotateX(-75deg) rotateY(0deg) rotateZ(0deg);
     }
+
     25% {
         transform: translate(-50%, -50%) rotate(90deg) translateX(225px) rotateX(-78deg) rotateY(-2deg) rotateZ(0deg);
     }
+
     50% {
         transform: translate(-50%, -50%) rotate(180deg) translateX(225px) rotateX(-72deg) rotateY(1deg) rotateZ(0deg);
     }
+
     75% {
         transform: translate(-50%, -50%) rotate(270deg) translateX(225px) rotateX(-76deg) rotateY(-1deg) rotateZ(0deg);
     }
+
     100% {
         transform: translate(-50%, -50%) rotate(360deg) translateX(225px) rotateX(-75deg) rotateY(0deg) rotateZ(0deg);
     }
@@ -306,15 +439,20 @@ main::before {
 
 /* Creates natural wobble motion for the orbit container */
 @keyframes wobble {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translate(-50%, -50%) rotateX(75deg) rotateY(0deg);
     }
+
     25% {
         transform: translate(-50%, -50%) rotateX(78deg) rotateY(2deg);
     }
+
     50% {
         transform: translate(-50%, -50%) rotateX(72deg) rotateY(-1deg);
     }
+
     75% {
         transform: translate(-50%, -50%) rotateX(76deg) rotateY(1deg);
     }
@@ -322,10 +460,13 @@ main::before {
 
 /* Gentle floating animation for stars */
 @keyframes float {
-    0%, 100% {
+
+    0%,
+    100% {
         transform: translateY(0px) scale(1);
         opacity: 0.7;
     }
+
     50% {
         transform: translateY(-10px) scale(1.1);
         opacity: 1;
@@ -335,7 +476,7 @@ main::before {
 /* ===== BROWSER COMPATIBILITY FALLBACKS ===== */
 /* Fallback for browsers that don't support text-stroke */
 .orbiit {
-    text-shadow: 
+    text-shadow:
         -3px -3px 0 #333,
         3px -3px 0 #333,
         -3px 3px 0 #333,
@@ -349,19 +490,26 @@ main::before {
 /* HYBRID APPROACH: Filled text on mobile, outlined on desktop */
 @media (max-width: 768px) {
     .orbiit {
-        color: #333 !important; /* ← Solid dark color for mobile */
-        -webkit-text-stroke: none; /* ← Remove stroke on mobile */
-        text-shadow: none; /* ← Remove shadow on mobile */
-        font-weight: 900; /* ← Extra bold for mobile impact */
+        color: #333 !important;
+        /* ← Solid dark color for mobile */
+        -webkit-text-stroke: none;
+        /* ← Remove stroke on mobile */
+        text-shadow: none;
+        /* ← Remove shadow on mobile */
+        font-weight: 900;
+        /* ← Extra bold for mobile impact */
     }
 }
 
 /*Card Styles*/
 /* ===== CARD STYLE 4B: OUTLINED TEXT WITH BLUR ===== */
 .card-outlined-blur {
-    background: rgba(255, 255, 255, 0.323); /* Much more transparent */
-    backdrop-filter: blur(2px); /* Background blur effect */
-    -webkit-backdrop-filter: blur(2px); /* Safari support */
+    background: rgba(255, 255, 255, 0.323);
+    /* Much more transparent */
+    backdrop-filter: blur(2px);
+    /* Background blur effect */
+    -webkit-backdrop-filter: blur(2px);
+    /* Safari support */
     border: 3px solid #333;
     border-radius: 0;
     padding: 0;
@@ -373,12 +521,15 @@ main::before {
 }
 
 .card-outlined-blur:hover {
-    background: rgba(0, 0, 0, 0.47); /* Dark semi-transparent on hover */
-    backdrop-filter: blur(15px); /* Increased blur on hover */
+    background: rgba(0, 0, 0, 0.47);
+    /* Dark semi-transparent on hover */
+    backdrop-filter: blur(15px);
+    /* Increased blur on hover */
     -webkit-backdrop-filter: blur(15px);
     color: white;
     transform: translateY(-5px);
-    box-shadow: 8px 8px 0px #333; /* Offset shadow */
+    box-shadow: 8px 8px 0px #333;
+    /* Offset shadow */
 }
 
 .card-outlined-blur h3 {
@@ -416,6 +567,7 @@ main::before {
 
 /* Mobile-friendly scroll animations - triggers hover effects on scroll */
 @media (max-width: 768px) {
+
     /* When card is in view, apply hover effects automatically */
     .card-outlined-blur.in-view {
         background: rgba(0, 0, 0, 0.47);
@@ -425,27 +577,27 @@ main::before {
         transform: translateY(-5px);
         box-shadow: 8px 8px 0px #333;
     }
-    
+
     .card-outlined-blur.in-view h3 {
         color: white;
         -webkit-text-stroke: 2px white;
     }
-    
+
     .card-outlined-blur.in-view p {
         color: #ddd;
     }
-    
+
     /* Add future card types here as needed */
     .card-minimal.in-view {
         transform: translateY(-5px);
         box-shadow: 8px 8px 0px #333;
     }
-    
+
     .card-3d.in-view {
         transform: rotateX(5deg) rotateY(5deg) translateZ(20px);
-        box-shadow: 20px 20px 40px rgba(0,0,0,0.1);
+        box-shadow: 20px 20px 40px rgba(0, 0, 0, 0.1);
     }
-    
+
     /* Smooth transitions for mobile */
     .card-outlined-blur,
     .card-minimal,
@@ -490,8 +642,10 @@ main::before {
     line-height: 1.7;
     color: #333;
     background-color: rgba(255, 255, 255, 0.562);
-    backdrop-filter: blur(100px); /* Background blur effect */
-    -webkit-backdrop-filter: blur(2px); /* Safari support */
+    backdrop-filter: blur(100px);
+    /* Background blur effect */
+    -webkit-backdrop-filter: blur(2px);
+    /* Safari support */
     max-width: 800px;
     margin: 0 auto;
     text-align: justify;
@@ -792,9 +946,12 @@ main::before {
 /* ===== STARTUPS SECTION ===== */
 .startups-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    grid-template-columns: 1fr;
+    gap: 40px;
     margin-top: 50px;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .startup-card {
@@ -802,10 +959,33 @@ main::before {
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     border: 3px solid #333;
-    padding: 30px;
-    text-align: center;
+    padding: 40px;
+    padding-left: 100px;
+    text-align: left;
     transition: all 0.3s ease;
-    min-height: 280px;
+    min-height: 150px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.startup-number {
+    position: absolute;
+    left: 20px;
+    top: 40px;
+    font-size: 3.5rem;
+    font-weight: 900;
+    color: #333;
+    opacity: 0.15;
+    line-height: 1;
+    transition: all 0.3s ease;
+}
+
+.startup-card:hover .startup-number {
+    opacity: 1;
+    transform: scale(1.1);
+    color: white;
 }
 
 .startup-card:hover {
@@ -866,11 +1046,12 @@ main::before {
 /* ===== APPLICATION PROCESS SECTION ===== */
 .process-container {
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    margin: 50px 0;
-    flex-wrap: wrap;
-    gap: 20px;
+    margin: 50px auto;
+    flex-wrap: nowrap;
+    gap: 15px;
+    max-width: 100%;
 }
 
 .process-step {
@@ -878,12 +1059,15 @@ main::before {
     backdrop-filter: blur(2px);
     -webkit-backdrop-filter: blur(2px);
     border: 3px solid #333;
-    padding: 30px;
+    padding: 30px 20px;
     text-align: center;
     transition: all 0.3s ease;
-    max-width: 300px;
     flex: 1;
-    min-width: 250px;
+    min-width: 0;
+    /* Allow shrinking below min-content */
+    max-width: 350px;
+    display: flex;
+    flex-direction: column;
 }
 
 .process-step:hover {
@@ -938,10 +1122,11 @@ main::before {
 }
 
 .process-connector {
-    width: 50px;
+    width: 40px;
     height: 3px;
     background-color: #333;
-    margin: 0 10px;
+    align-self: center;
+    flex-shrink: 0;
 }
 
 .eligibility-info {
@@ -1055,39 +1240,40 @@ main::before {
         flex-direction: column;
         align-items: center;
     }
-    
+
     .btn {
         width: 100%;
         max-width: 300px;
     }
-    
+
     .about-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .services-grid,
     .facilities-grid,
     .startups-grid {
         grid-template-columns: 1fr;
         gap: 20px;
     }
-    
+
     .process-container {
         flex-direction: column;
     }
-    
+
     .process-connector {
         width: 3px;
         height: 30px;
-        transform: rotate(90deg);
+        margin: 10px auto;
+        transform: none;
     }
-    
+
     .contact-container {
         grid-template-columns: 1fr;
         gap: 30px;
     }
-    
+
     .about-section,
     .services-section,
     .facilities-section,
@@ -1096,7 +1282,7 @@ main::before {
     .contact-section {
         padding: 60px 20px;
     }
-    
+
     /* Mobile scroll animations */
     .service-card.in-view,
     .facility-card.in-view,
@@ -1109,32 +1295,32 @@ main::before {
         transform: translateY(-5px);
         box-shadow: 8px 8px 0px #333;
     }
-    
+
     .service-card.in-view h3,
     .facility-card.in-view h3,
     .startup-card.in-view h3,
     .process-step.in-view .step-content h3 {
         color: white;
     }
-    
+
     .service-card.in-view p,
     .facility-card.in-view p,
     .startup-card.in-view p,
     .process-step.in-view .step-content p {
         color: #ddd;
     }
-    
+
     .service-card.in-view .service-icon,
     .facility-card.in-view .facility-icon {
         background: #333;
         transform: scale(1.05);
     }
-    
+
     .service-card.in-view .service-icon i,
     .facility-card.in-view .facility-icon i {
         color: #fff;
     }
-    
+
     .startup-card.in-view .logo-placeholder,
     .process-step.in-view .step-number {
         border-color: white;
@@ -1154,14 +1340,28 @@ main::before {
     transform: translateY(0);
 }
 
-.stagger-1 { transition-delay: 0.1s; }
-.stagger-2 { transition-delay: 0.2s; }
-.stagger-3 { transition-delay: 0.3s; }
-.stagger-4 { transition-delay: 0.4s; }
-.stagger-5 { transition-delay: 0.5s; }
+.stagger-1 {
+    transition-delay: 0.1s;
+}
+
+.stagger-2 {
+    transition-delay: 0.2s;
+}
+
+.stagger-3 {
+    transition-delay: 0.3s;
+}
+
+.stagger-4 {
+    transition-delay: 0.4s;
+}
+
+.stagger-5 {
+    transition-delay: 0.5s;
+}
 
 /*Footer*/
-footer{
+footer {
     background-color: #000000;
     color: #fff;
     text-align: center;

@@ -41,21 +41,44 @@
 
         .startup-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
+            grid-template-columns: 1fr;
+            gap: 40px;
             margin-top: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .startup-card {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             border: 3px solid #333;
-            padding: 30px;
+            padding: 40px;
+            padding-left: 100px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 10px;
+            min-height: 150px;
+            text-align: left;
+        }
+
+        .startup-number {
+            position: absolute;
+            left: 20px;
+            top: 40px;
+            font-size: 3rem;
+            font-weight: 900;
+            color: #333;
+            opacity: 0.2;
+            line-height: 1;
+            transition: all 0.3s ease;
+        }
+
+        .startup-card:hover .startup-number {
+            opacity: 1;
+            transform: scale(1.1);
         }
 
         .startup-card:hover {
@@ -232,7 +255,7 @@
 <body>
     <header>
         <nav>
-            <a href="index.html"><img src="logo.jpeg" class="logo" alt="ORBIIT" style="height: 80px; width: 240px;"></a>
+            <a href="index.html"><img src="logo.jpeg" class="logo" alt="ORBIIT"></a>
             <div class="nav-toggle" id="nav-toggle">
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
@@ -253,8 +276,8 @@
     <main>
         <section class="cms-hero">
             <div class="cms-header animate__animated animate__fadeIn">
-                <h1 class="cms-title"></h1>
-                <p class="cms-subtitle"></p>
+                <h1 class="cms-title">Our Incubated Startups</h1>
+
             </div>
         </section>
 
@@ -299,21 +322,42 @@
 
     <script src="config.js"></script>
     <script>
+        function formatDate(value) {
+            if (!value) return 'Pending';
+
+            // Handle Excel serial numbers
+            const serial = parseFloat(value);
+            if (!isNaN(serial) && serial > 30000) {
+                // Excel dates are days since 1899-12-30
+                const date = new Date(Math.round((serial - 25569) * 86400 * 1000));
+                return date.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+            }
+            return value;
+        }
+
         async function fetchCMSData() {
             const loading = document.getElementById('loading');
             const errorDiv = document.getElementById('error-message');
             const errorText = document.getElementById('error-text');
 
+            // Google Sheet CSV Export URL
+            const sheetId = '1_lr38OyIVaXesezefRhtMBDyrsPT8Vi7uB57Y168E_s';
+            const sheetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=0`;
+
             try {
-                // Fetch the Excel file
-                const response = await fetch('startups.xlsx');
-                if (!response.ok) throw new Error('Excel file not found or inaccessible (startups.xlsx)');
+                // Fetch the Google Sheet data as CSV
+                // Use a timestamp to prevent caching and ensure real-time updates
+                const response = await fetch(`${sheetUrl}&t=${new Date().getTime()}`);
+                if (!response.ok) throw new Error('Could not connect to Google Sheets. Ensure the sheet is published to the web.');
 
-                const arrayBuffer = await response.arrayBuffer();
-                const data = new Uint8Array(arrayBuffer);
-                const workbook = XLSX.read(data, { type: 'array' });
+                const csvData = await response.text();
 
-                // Get the first sheet
+                // Parse CSV using SheetJS
+                const workbook = XLSX.read(csvData, { type: 'string' });
                 const firstSheetName = workbook.SheetNames[0];
                 const worksheet = workbook.Sheets[firstSheetName];
 
@@ -326,14 +370,14 @@
                     renderCards(records);
                 } else {
                     errorDiv.style.display = 'block';
-                    errorText.textContent = 'No startup records found in the Excel file.';
+                    errorText.textContent = 'No startup records found in the Google Sheet.';
                 }
 
             } catch (err) {
-                console.error('Excel Error:', err);
+                console.error('CMS Error:', err);
                 loading.style.display = 'none';
                 errorDiv.style.display = 'block';
-                errorText.textContent = 'Error: ' + err.message;
+                errorText.textContent = 'Error connecting to live data: ' + err.message;
             }
         }
 
@@ -360,6 +404,7 @@
                 const recordStr = JSON.stringify(fields).replace(/'/g, "&apos;").replace(/"/g, '&quot;');
 
                 card.innerHTML = `
+                    <div class="startup-number">${String(index + 1).padStart(2, '0')}</div>
                     <div class="startup-tag">${tag}</div>
                     <h3>${name}</h3>
                     <p class="startup-desc">${description}</p>
@@ -392,7 +437,7 @@
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Incubation Start Date</span>
-                        <span class="detail-value">${fields['INCUBATION START DATE'] || 'Pending'}</span>
+                        <span class="detail-value">${formatDate(fields['INCUBATION START DATE'])}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Current Status</span>

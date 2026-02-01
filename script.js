@@ -1,5 +1,5 @@
 // Enhanced scroll animations for all sections
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Check if device is mobile/tablet
     function isMobile() {
         return window.innerWidth <= 768;
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('in-view');
-                
+
                 // Handle staggered animations for child elements
                 const staggeredElements = entry.target.querySelectorAll('.stagger-1, .stagger-2, .stagger-3, .stagger-4, .stagger-5');
                 staggeredElements.forEach((element, index) => {
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Handle window resize
-    window.addEventListener('resize', function() {
+    window.addEventListener('resize', function () {
         if (!isMobile()) {
             // Remove mobile-specific in-view classes on desktop
             document.querySelectorAll('.service-card.in-view, .facility-card.in-view, .startup-card.in-view, .process-step.in-view').forEach(card => {
@@ -88,23 +88,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Mobile Navigation Toggle
     const navToggle = document.getElementById('nav-toggle');
     const navLinks = document.getElementById('nav-links');
-    
+
     if (navToggle && navLinks) {
-        navToggle.addEventListener('click', function() {
+        navToggle.addEventListener('click', function () {
             navToggle.classList.toggle('active');
             navLinks.classList.toggle('active');
         });
-        
+
         // Close mobile menu when clicking on a link
         navLinks.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function () {
                 navToggle.classList.remove('active');
                 navLinks.classList.remove('active');
             });
         });
-        
+
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
                 navToggle.classList.remove('active');
                 navLinks.classList.remove('active');
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Form submission handler (wired to Formspree)
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', async function(e) {
+        contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const form = this;
@@ -142,38 +142,33 @@ document.addEventListener('DOMContentLoaded', function() {
                 return;
             }
 
-            // Formspree endpoint (your provided URL)
-            const FORMSPREE_ENDPOINT = 'https://formspree.io/f/mlgrqllb';
-            const formData = new FormData(form);
+            // Redirect to Gmail via mailto
+            const receiver = "orbiit@rajagiritech.edu.in";
+            const mailBody = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
+            const mailtoLink = `mailto:${receiver}?subject=${encodeURIComponent(subject || 'New Message from Website')}&body=${encodeURIComponent(mailBody)}`;
 
             try {
                 submitBtn.disabled = true;
-                submitBtn.textContent = 'Sending...';
+                submitBtn.textContent = 'Redirecting...';
                 feedback.style.display = 'block';
-                feedback.textContent = 'Sending message...';
-                feedback.style.color = '';
+                feedback.textContent = 'Opening your email client...';
+                feedback.style.color = '#333';
 
-                const res = await fetch(FORMSPREE_ENDPOINT, {
-                    method: 'POST',
-                    body: formData,
-                    headers: { 'Accept': 'application/json' }
-                });
+                // Open the mail client
+                window.location.href = mailtoLink;
 
-                if (res.ok) {
-                    feedback.textContent = 'Thank you — your message was sent!';
-                    feedback.style.color = 'var(--success-color, #0a0)';
+                // Reset form after a delay
+                setTimeout(() => {
                     form.reset();
-                } else {
-                    const data = await res.json().catch(() => ({}));
-                    const err = data?.error || 'Failed to send message. Please try again later.';
-                    feedback.textContent = err;
-                    feedback.style.color = 'var(--danger-color, #c00)';
-                }
+                    feedback.textContent = 'Message details redirected to email client.';
+                    feedback.style.color = 'var(--success-color, #0a0)';
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Send Message';
+                }, 2000);
+
             } catch (err) {
-                feedback.textContent = 'Network error. Please try again later.';
+                feedback.textContent = 'Error redirecting to email client.';
                 feedback.style.color = 'var(--danger-color, #c00)';
-                console.error(err);
-            } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
             }
@@ -182,19 +177,19 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // Add parallax effect for stars (existing functionality preserved)
-document.addEventListener('mousemove', function(e) {
+document.addEventListener('mousemove', function (e) {
     // Only apply on desktop
     if (window.innerWidth > 768) {
         const mouseX = (e.clientX / window.innerWidth) - 0.5;
         const mouseY = (e.clientY / window.innerHeight) - 0.5;
-        
+
         const orbiitContainer = document.querySelector('.orbiit-container');
         if (orbiitContainer) {
             orbiitContainer.style.transform = `translate(-50%, -50%) 
                 translateX(${mouseX * 20}px) 
                 translateY(${mouseY * 20}px)`;
         }
-        
+
         const stars = document.querySelectorAll('.star');
         stars.forEach((star, index) => {
             const speed = (index + 1) * 0.5;
