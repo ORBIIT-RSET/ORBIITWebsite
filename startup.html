@@ -255,7 +255,10 @@
 <body>
     <header>
         <nav>
-            <a href="index.html"><img src="logo.jpeg" class="logo" alt="ORBIIT"></a>
+            <a href="index.html" class="logo-container">
+                <img src="logo.jpeg" class="logo" alt="ORBIIT">
+                <img src="rset.png" class="logo" alt="ORBIIT">
+            </a>
             <div class="nav-toggle" id="nav-toggle">
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
@@ -294,6 +297,17 @@
                 <div style="margin-top: 15px;">
                     <a href="index.html#startups" class="btn btn-outline"
                         style="padding: 10px 20px; font-size: 0.8rem;">View Offline Version</a>
+                </div>
+            </div>
+
+            <div class="status-legend animate__animated animate__fadeIn">
+                <div class="legend-item">
+                    <div class="legend-box active"></div>
+                    <span>Active Startup</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-box exited"></div>
+                    <span>Exited Startup</span>
                 </div>
             </div>
 
@@ -398,6 +412,13 @@
 
                 const card = document.createElement('div');
                 card.className = 'startup-card animate__animated animate__fadeInUp';
+                // Add status class
+                const status = (fields['CURRENT STATUS'] || '').toUpperCase();
+                if (status.includes('ACTIVE')) {
+                    card.classList.add('status-active');
+                } else if (status.includes('EXITED')) {
+                    card.classList.add('status-exited');
+                }
                 card.style.animationDelay = `${index * 0.1}s`;
 
                 // Stringify the record for the showDetails function, escaping quotes

@@ -29,6 +29,12 @@ header nav {
     /* Reduced vertical padding to allow logo to dominate */
 }
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 
 
 .logo {
@@ -204,14 +210,13 @@ main::before {
     width: 100%;
     text-align: center;
     padding: 20px 10px;
-    font-size: clamp(0.7rem, 2vw, 1.3rem);
+    font-size: clamp(1rem, 2.5vw, 1.8rem);
     font-weight: 800;
-    letter-spacing: clamp(2px, 0.8vw, 6px);
-    color: #333;
+    letter-spacing: clamp(1px, 0.6vw, 5px);
+    color: grey;
     background-color: transparent;
-    text-transform: uppercase;
     position: relative;
-    margin-top: -40px;
+    margin-top: -10px;
     /* Pull it closer to the animation but keep it outside */
     z-index: 20;
 }
@@ -752,6 +757,7 @@ main::before {
     grid-template-columns: 1fr 1fr;
     gap: 30px;
     margin-top: 50px;
+    align-items: start;
 }
 
 .mission-vision {
@@ -1370,4 +1376,52 @@ footer {
 
 .footer-content p {
     margin: 5px 0;
+}
+
+/* Status coloring and Legend */
+.startup-card.status-active {
+    border-color: #28a745;
+    background: rgba(40, 167, 69, 0.05);
+}
+
+.startup-card.status-exited {
+    border-color: #dc3545;
+    background: rgba(220, 53, 69, 0.05);
+}
+
+.status-legend {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0 40px;
+    padding: 15px;
+    background: #fff;
+    border: 2px solid #333;
+    max-width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: #333;
+}
+
+.legend-box {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #333;
+}
+
+.legend-box.active {
+    background-color: #28a745;
+}
+
+.legend-box.exited {
+    background-color: #dc3545;
 }
