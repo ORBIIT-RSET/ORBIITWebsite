@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Form submission handler (wired to Formspree)
+    // Form submission handler (Web3Forms API)
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
         contactForm.addEventListener('submit', async function (e) {
@@ -121,16 +121,21 @@ document.addEventListener('DOMContentLoaded', function () {
             const form = this;
             const submitBtn = form.querySelector('button[type="submit"]');
             const feedback = form.querySelector('#contact-feedback');
-            const name = form.querySelector('#name').value.trim();
-            const email = form.querySelector('#email').value.trim();
-            const subject = form.querySelector('#subject').value.trim();
-            const message = form.querySelector('#message').value.trim();
+            const formData = new FormData(form);
+
+            // Get form values for validation
+            const name = formData.get('name').trim();
+            const email = formData.get('email').trim();
+            const message = formData.get('message').trim();
 
             // Basic validation
             if (!name || !email || !message) {
                 feedback.style.display = 'block';
                 feedback.textContent = 'Please fill in all required fields.';
-                feedback.style.color = 'var(--danger-color, #c00)';
+                feedback.style.color = '#ff4444';
+                feedback.style.backgroundColor = '#ffebee';
+                feedback.style.padding = '10px';
+                feedback.style.borderRadius = '4px';
                 return;
             }
 
@@ -138,37 +143,60 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!emailRegex.test(email)) {
                 feedback.style.display = 'block';
                 feedback.textContent = 'Please enter a valid email address.';
-                feedback.style.color = 'var(--danger-color, #c00)';
+                feedback.style.color = '#ff4444';
+                feedback.style.backgroundColor = '#ffebee';
+                feedback.style.padding = '10px';
+                feedback.style.borderRadius = '4px';
                 return;
             }
 
-            // Redirect to Gmail via mailto
-            const receiver = "orbiit@rajagiritech.edu.in";
-            const mailBody = `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`;
-            const mailtoLink = `mailto:${receiver}?subject=${encodeURIComponent(subject || 'New Message from Website')}&body=${encodeURIComponent(mailBody)}`;
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+            feedback.style.display = 'block';
+            feedback.textContent = 'Sending your message...';
+            feedback.style.color = '#333';
+            feedback.style.backgroundColor = '#e3f2fd';
+            feedback.style.padding = '10px';
+            feedback.style.borderRadius = '4px';
 
             try {
-                submitBtn.disabled = true;
-                submitBtn.textContent = 'Redirecting...';
-                feedback.style.display = 'block';
-                feedback.textContent = 'Opening your email client...';
-                feedback.style.color = '#333';
+                // Send to Web3Forms API
+                console.log('Submitting form to Web3Forms...');
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
 
-                // Open the mail client
-                window.location.href = mailtoLink;
+                const data = await response.json();
+                console.log('Web3Forms API Response:', data);
+                console.log('Response Status:', response.status);
+                console.log('Response OK:', response.ok);
 
-                // Reset form after a delay
-                setTimeout(() => {
+                if (response.ok && data.success) {
+                    // Success
+                    feedback.textContent = '✓ Message sent successfully! We\'ll get back to you soon.';
+                    feedback.style.color = '#2e7d32';
+                    feedback.style.backgroundColor = '#e8f5e9';
                     form.reset();
-                    feedback.textContent = 'Message details redirected to email client.';
-                    feedback.style.color = 'var(--success-color, #0a0)';
-                    submitBtn.disabled = false;
-                    submitBtn.textContent = 'Send Message';
-                }, 2000);
 
-            } catch (err) {
-                feedback.textContent = 'Error redirecting to email client.';
-                feedback.style.color = 'var(--danger-color, #c00)';
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        feedback.style.display = 'none';
+                    }, 5000);
+                } else {
+                    // API returned error
+                    throw new Error(data.message || 'Failed to send message');
+                }
+
+            } catch (error) {
+                // Error handling
+                console.error('Form submission error:', error);
+                feedback.textContent = '✗ Network error. Please check your connection and try again, or email us directly at orbiit@rajagiritech.edu.in';
+                feedback.style.color = '#c62828';
+                feedback.style.backgroundColor = '#ffebee';
+            } finally {
+                // Reset button state
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Send Message';
             }
